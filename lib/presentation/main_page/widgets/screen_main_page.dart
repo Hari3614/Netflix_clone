@@ -7,7 +7,7 @@ import 'package:netflix/presentation/new_and_hot/screen_new_and_hot.dart';
 import 'package:netflix/presentation/search/screen_search.dart';
 
 class ScreenMainPage extends StatelessWidget {
-  const ScreenMainPage({super.key});
+  ScreenMainPage({super.key});
 
   final _pages = const [
     ScreenHome(),
