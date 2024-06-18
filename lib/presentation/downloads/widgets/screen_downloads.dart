@@ -11,9 +11,9 @@ class ScreenDownloads extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _widgetList = [
-      _SmartDownloads(),
-      Section2(),
-      Section3(),
+      const _SmartDownloads(),
+      const Section2(),
+      const Section3(),
     ];
 
     return Scaffold(
@@ -22,9 +22,9 @@ class ScreenDownloads extends StatelessWidget {
         child: AppBarWidget(),
       ),
       body: ListView.separated(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         itemBuilder: (context, index) => _widgetList[index],
-        separatorBuilder: (context, index) => SizedBox(
+        separatorBuilder: (context, index) => const SizedBox(
           height: 23,
         ),
         itemCount: _widgetList.length,
