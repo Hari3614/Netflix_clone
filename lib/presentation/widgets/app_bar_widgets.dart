@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:netflix/core/constants.dart';
 
 class AppBarWidget extends StatelessWidget {
-  const AppBarWidget({super.key});
+  const AppBarWidget({super.key, required this.title});
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Text(
-          "Downloads",
+        Text(
+          title,
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.w900,
@@ -51,10 +52,10 @@ class SmileyPainter extends CustomPainter {
     final mouthPath = Path()
       ..moveTo(size.width * 0.2, size.height * 0.7)
       ..quadraticBezierTo(
-        size.width * 0.5,
+        size.width * 0.8,
         size.height * 0.9,
         size.width * 0.8,
-        size.height * 0.7,
+        size.height * 0.6,
       )
       ..quadraticBezierTo(
         size.width * 0.5,

@@ -46,13 +46,14 @@ class VideoListItem extends StatelessWidget {
                       child: CircleAvatar(
                         radius: 30,
                         backgroundImage: NetworkImage(
-                            'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg'),
+                          'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg',
+                        ),
                       ),
                     ),
                     VideoActionsWidgets(
                         icon: Icons.emoji_emotions, title: 'LOL'),
                     VideoActionsWidgets(icon: Icons.add, title: 'My List'),
-                    VideoActionsWidgets(icon: Icons.share, title: 'Share'),
+                    VideoActionsWidgets(icon: Icons.send, title: 'Share'),
                     VideoActionsWidgets(icon: Icons.play_arrow, title: 'Play'),
                   ],
                 ),
