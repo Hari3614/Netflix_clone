@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
 class VideoListItem extends StatelessWidget {
-  final int index;
-  const VideoListItem({super.key, required this.index});
+  final String image;
+  const VideoListItem({
+    super.key,
+    required this.image,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
-          color: Colors.accents[index % Colors.accents.length],
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage(image), fit: BoxFit.cover)),
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -38,23 +43,21 @@ class VideoListItem extends StatelessWidget {
 
                 //right side
 
-                const Column(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       child: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: NetworkImage(
-                          'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg',
-                        ),
-                      ),
+                          radius: 30, backgroundImage: NetworkImage(image)),
                     ),
-                    VideoActionsWidgets(
+                    const VideoActionsWidgets(
                         icon: Icons.emoji_emotions, title: 'LOL'),
-                    VideoActionsWidgets(icon: Icons.add, title: 'My List'),
-                    VideoActionsWidgets(icon: Icons.send, title: 'Share'),
-                    VideoActionsWidgets(icon: Icons.play_arrow, title: 'Play'),
+                    const VideoActionsWidgets(
+                        icon: Icons.add, title: 'My List'),
+                    const VideoActionsWidgets(icon: Icons.send, title: 'Share'),
+                    const VideoActionsWidgets(
+                        icon: Icons.play_arrow, title: 'Play'),
                   ],
                 ),
               ],

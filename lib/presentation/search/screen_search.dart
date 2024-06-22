@@ -1,40 +1,71 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:netflix/core/constants.dart';
+import 'package:netflix/infrastructure/whole_movies.dart';
+import 'package:netflix/model/model.dart';
+import 'package:netflix/presentation/search/widgets/search_idle.dart';
 import 'package:netflix/presentation/search/widgets/search_result.dart';
 
-class ScreenSearch extends StatelessWidget {
+ValueNotifier<List<Movie>> searchNotifier = ValueNotifier([]);
+
+class ScreenSearch extends StatefulWidget {
   const ScreenSearch({super.key});
+
+  @override
+  State<ScreenSearch> createState() => _ScreenSearchState();
+}
+
+class _ScreenSearchState extends State<ScreenSearch> {
+  final searchController = TextEditingController();
+  late Future<List<Movie>> wholeMovies;
+  bool _isSearch = false;
+
+  @override
+  void initState() {
+    wholeMovies = getAllMovies();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CupertinoSearchTextField(
-                backgroundColor: Colors.grey.withOpacity(0.3),
-                prefixIcon: const Icon(
-                  CupertinoIcons.search,
-                  color: Colors.grey,
-                ),
-                suffixIcon: const Icon(
-                  CupertinoIcons.xmark_circle_fill,
-                  color: Colors.grey,
-                ),
-                style: const TextStyle(color: Colors.white),
+          child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            CupertinoTextField(
+              controller: searchController,
+              onChanged: (value) async {
+                searchNotifier.value = await searchdata(searchController.text);
+              },
+              onTap: () {
+                setState(() {
+                  _isSearch = true;
+                });
+              },
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.grey.withOpacity(0.4),
               ),
-              const SizedBox(
-                height: 10,
+              prefix: const Icon(
+                CupertinoIcons.search,
+                color: Colors.grey,
               ),
-              // const Expanded(child: SearchIdleWidget()),
-              const Expanded(child: SearchResultWidget()),
-            ],
-          ),
+              suffix: const Icon(CupertinoIcons.xmark_circle_fill,
+                  color: Colors.grey),
+              style: const TextStyle(color: Colors.white),
+            ),
+            kheight,
+            _isSearch == false
+                ? Expanded(
+                    child: SearchIdleWidget(
+                    movies: wholeMovies,
+                  ))
+                : const Expanded(child: SearchResultWidget())
+          ],
         ),
-      ),
+      )),
     );
   }
 }

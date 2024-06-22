@@ -12,6 +12,10 @@ const kheight20 = SizedBox(
   height: 20,
 );
 
+const kHeight30 = SizedBox(
+  height: 30,
+);
+
 final BorderRadius kRadius10 = BorderRadius.circular(10);
 
 const kMainimage =

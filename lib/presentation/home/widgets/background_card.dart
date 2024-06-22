@@ -35,7 +35,7 @@ class BackgroundCard extends StatelessWidget {
                 _playButton(),
                 const CoustomButtonWidget(
                   title: 'Info',
-                  icon: Icons.info,
+                  icon: Icons.info_outline,
                 ),
               ],
             ),

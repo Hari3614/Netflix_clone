@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:netflix/core/api_const.dart';
+import 'package:netflix/presentation/search/screen_search.dart';
 
 import 'package:netflix/presentation/search/widgets/title.dart';
-
-const ImageUrl1 =
-    'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg';
 
 class SearchResultWidget extends StatelessWidget {
   const SearchResultWidget({super.key});
@@ -19,36 +18,50 @@ class SearchResultWidget extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        Expanded(
-          child: GridView.count(
-            shrinkWrap: true,
-            crossAxisCount: 3,
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
-            childAspectRatio: 1.2 / 1.4,
-            children: List.generate(20, (index) {
-              return const MainCard();
-            }),
-          ),
-        )
+        ValueListenableBuilder(
+          valueListenable: searchNotifier,
+          builder: (context, snapshot, _) {
+            if (snapshot.isEmpty) {
+              return const Center(child: Text('not found'));
+            } else if (snapshot.isNotEmpty) {
+              return Expanded(
+                  child: GridView.builder(
+                itemCount: snapshot.length,
+                itemBuilder: (context, index) {
+                  final movies = snapshot[index];
+                  final image =
+                      ApiConstants.imageBaseUrl + (movies.posterPath ?? '');
+                  return MainMovieCard(
+                    image: image,
+                  );
+                },
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 1 / 1.4,
+                  crossAxisCount: 3,
+                ),
+              ));
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ],
     );
   }
 }
 
-class MainCard extends StatelessWidget {
-  const MainCard({super.key});
+class MainMovieCard extends StatelessWidget {
+  const MainMovieCard({super.key, required this.image});
+  final String image;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        image: const DecorationImage(
-          image: NetworkImage(ImageUrl1),
-          fit: BoxFit.cover,
-        ),
-        borderRadius: BorderRadius.circular(7),
-      ),
+          image: DecorationImage(image: NetworkImage(image), fit: BoxFit.cover),
+          borderRadius: BorderRadius.circular(8)),
     );
   }
 }

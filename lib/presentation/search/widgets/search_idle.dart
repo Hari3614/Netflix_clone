@@ -1,40 +1,59 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:netflix/core/api_const.dart';
 import 'package:netflix/core/constants.dart';
 import 'package:netflix/presentation/search/widgets/title.dart';
 
-const imageUrl =
-    'https://media.themoviedb.org/t/p/w250_and_h141_face/qBppESpY8e97WfPWVZiU0JdRXw.jpg';
-
 class SearchIdleWidget extends StatelessWidget {
-  const SearchIdleWidget({super.key});
+  final Future<List<dynamic>> movies;
+  const SearchIdleWidget({super.key, required this.movies});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SearchTextTitle(
-          title: 'Top Searches',
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Expanded(
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemBuilder: (context, Index) => TopsearchItemTile(),
-            separatorBuilder: (context, Index) => kheight20,
-            itemCount: 10,
-          ),
-        )
-      ],
-    );
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const SearchTextTitle(
+        title: 'Top Searches',
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      FutureBuilder(
+        future: movies,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('error is :${snapshot.error}');
+          } else if (snapshot.hasData) {
+            return Expanded(
+              child: ListView.separated(
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    final movie = snapshot.data![index];
+                    final image =
+                        ApiConstants.imageBaseUrl + (movie.backDropPath ?? '');
+                    final titleOfMovie = movie.orginaltitle ?? '';
+                    print(image);
+                    print(titleOfMovie);
+
+                    return TopsearchItemTile(
+                        imageUrl: image, title: titleOfMovie);
+                  },
+                  separatorBuilder: (context, index) => kheight20,
+                  itemCount: snapshot.data!.length),
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      )
+    ]);
   }
 }
 
 class TopsearchItemTile extends StatelessWidget {
-  const TopsearchItemTile({super.key});
+  final String imageUrl;
+  final String title;
+  const TopsearchItemTile(
+      {super.key, required this.imageUrl, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -44,17 +63,18 @@ class TopsearchItemTile extends StatelessWidget {
         Container(
           width: screenWidth * 0.35,
           height: 65,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
               image: NetworkImage(imageUrl),
             ),
           ),
         ),
-        const Expanded(
+        kWidth,
+        Expanded(
           child: Text(
-            'Movie Name',
-            style: TextStyle(
+            title,
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 16,

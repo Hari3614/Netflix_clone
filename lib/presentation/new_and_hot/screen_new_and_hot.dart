@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:netflix/core/constants.dart';
+import 'package:netflix/presentation/new_and_hot/widgets/coming_soon_widget.dart';
+import 'package:netflix/presentation/new_and_hot/widgets/everyone_wathcing_widget.dart';
 import 'package:netflix/presentation/widgets/app_bar_widgets.dart';
 
 class ScreenNewAndHot extends StatelessWidget {
@@ -41,7 +43,7 @@ class ScreenNewAndHot extends StatelessWidget {
               //isScrollable: true,
               unselectedLabelColor: Colors.white,
               labelColor: Colors.black,
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -61,13 +63,27 @@ class ScreenNewAndHot extends StatelessWidget {
             ),
           ),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: [
-            Center(child: Text('Coming Soon')),
-            Center(child: Text('Everyone Watching')),
+            _buildComingSoon(),
+            _buildEveryonesWatching(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildComingSoon() {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (BuildContext context, index) => const ComingSoonWidgets(),
+    );
+  }
+
+  Widget _buildEveryonesWatching() {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (context, index) => const EveryonesWatchingWidget(),
     );
   }
 }
