@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:netflix/core/colors.dart/colors.dart';
 
 class VideoWidget extends StatelessWidget {
+  final String? videoImage;
   const VideoWidget({
     super.key,
+    this.videoImage,
   });
 
   @override
@@ -12,13 +15,18 @@ class VideoWidget extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           height: 200,
-          child: Image.network(
-            "https://media.themoviedb.org/t/p/w355_and_h200_multi_faces/xtAQ7j9Yd0j4Rjbvx1hW0ENpXjf.jpg",
-            fit: BoxFit.cover,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: Image.network(
+              '$videoImage',
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         Positioned(
-          bottom: 0,
+          bottom: 10,
           right: 10,
           child: CircleAvatar(
             radius: 25,
@@ -27,12 +35,12 @@ class VideoWidget extends StatelessWidget {
               onPressed: () {},
               icon: const Icon(
                 Icons.volume_off,
-                color: Colors.white,
+                color: kWhitecolor,
                 size: 22,
               ),
             ),
           ),
-        ),
+        )
       ],
     );
   }

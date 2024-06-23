@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:netflix/core/constants.dart';
 import 'package:netflix/presentation/new_and_hot/widgets/coming_soon_widget.dart';
-import 'package:netflix/presentation/new_and_hot/widgets/everyone_wathcing_widget.dart';
-import 'package:netflix/presentation/widgets/app_bar_widgets.dart';
+import 'package:netflix/presentation/new_and_hot/widgets/everyones_watching_info_card.dart';
 
 class ScreenNewAndHot extends StatelessWidget {
   const ScreenNewAndHot({super.key});
@@ -13,77 +12,76 @@ class ScreenNewAndHot extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(100),
-          child: AppBar(
-            title: const Text(
-              "Hot & New",
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            actions: [
-              const Icon(
-                Icons.cast,
-                color: Colors.white,
-                size: 30,
-              ),
-              kWidth,
-              Container(
-                width: 30,
-                height: 30,
-                color: Colors.blue,
-                child: CustomPaint(
-                  painter: SmileyPainter(),
+            preferredSize: const Size.fromHeight(95),
+            child: AppBar(
+              title: const Text(
+                "New & Hot",
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w900,
                 ),
               ),
-              kWidth,
-            ],
-            bottom: TabBar(
-              //isScrollable: true,
-              unselectedLabelColor: Colors.white,
-              labelColor: Colors.black,
-              labelStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-              indicator: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              indicatorSize: TabBarIndicatorSize.tab,
-              tabs: const [
-                Tab(
-                  text: "🍿 Coming Soon",
+              actions: [
+                const Icon(
+                  Icons.cast,
+                  color: Colors.white,
+                  size: 30,
                 ),
-                Tab(
-                  text: "👀 Everyone Watching",
+                kWidth,
+                Container(
+                  height: 30,
+                  width: 30,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(appBarImage), fit: BoxFit.cover)),
                 ),
+                kWidth,
               ],
-            ),
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            _buildComingSoon(),
-            _buildEveryonesWatching(),
-          ],
-        ),
+              bottom: TabBar(
+                  unselectedLabelColor: Colors.white,
+                  labelColor: Colors.black,
+                  isScrollable: true,
+                  labelStyle: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                  indicator: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: kRadius30,
+                  ),
+                  tabs: const [
+                    Tab(
+                      text: "   🍿Coming Soon   ",
+                    ),
+                    Tab(
+                      text: "  🔥Everyone's watching  ",
+                    )
+                  ]),
+            )),
+        body: TabBarView(children: [
+          buildComingSoon(),
+          buildEveryonesWatching(),
+        ]),
       ),
     );
   }
 
-  Widget _buildComingSoon() {
-    return ListView.builder(
-      itemCount: 10,
-      itemBuilder: (BuildContext context, index) => const ComingSoonWidgets(),
-    );
+  Widget buildComingSoon() {
+    return const ComingSoonWidget();
   }
 
-  Widget _buildEveryonesWatching() {
-    return ListView.builder(
-      itemCount: 10,
-      itemBuilder: (context, index) => const EveryonesWatchingWidget(),
+  buildEveryonesWatching() {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        kheight20,
+        Text(
+          "🔥Everyone's watching",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 17,
+          ),
+        ),
+        Expanded(child: EveryonesWatchingWidget()),
+      ],
     );
   }
 }

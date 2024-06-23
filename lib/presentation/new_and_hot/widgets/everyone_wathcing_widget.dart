@@ -1,60 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:netflix/core/constants.dart';
 import 'package:netflix/presentation/home/widgets/custom_botton_widget.dart';
+
 import 'package:netflix/presentation/widgets/video_widget.dart';
 
-class EveryonesWatchingWidget extends StatelessWidget {
-  const EveryonesWatchingWidget({
+class EveryonesWatchingInfoCard extends StatelessWidget {
+  const EveryonesWatchingInfoCard({
     super.key,
+    required this.image,
+    required this.date,
+    required this.details,
+    required this.title,
   });
+  final String image;
+  final String date;
+
+  final String details;
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        kheight,
-        Text(
-          "Friends",
-          style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
-        ),
-        kheight,
-        Text(
-          "This hit sitcom follows the merry misadvetures of six 20-somthing pals as they navigate the pitfalls of work, life and love in 1990s Manhattan.",
-          style: TextStyle(color: Colors.grey, fontSize: 16),
-          textAlign: TextAlign.justify,
-        ),
-        kHeight30,
-        VideoWidget(),
-        kheight,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            CoustomButtonWidget(
-              icon: Icons.send,
-              title: "Share",
-              iconSize: 25,
-              textSize: 14,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //IMAGE,
+          VideoWidget(
+            videoImage: image,
+          ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CoustomButtonWidget(
+                  icon: Icons.share,
+                  title: 'Share',
+                ),
+                kWidth,
+                CoustomButtonWidget(
+                  icon: Icons.add,
+                  title: 'My List',
+                ),
+                kWidth,
+                CoustomButtonWidget(
+                  icon: Icons.play_arrow,
+                  title: "Play",
+                ),
+                kWidth,
+              ],
             ),
-            kWidth,
-            CoustomButtonWidget(
-              icon: Icons.add,
-              title: "My List",
-              iconSize: 25,
-              textSize: 14,
+          ),
+          kheight,
+          Text(
+            // movieInfo.originalTitle ??
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
-            kWidth,
-            CoustomButtonWidget(
-              icon: Icons.play_arrow,
-              title: "Play",
-              iconSize: 25,
-              textSize: 14,
-            ),
-            kWidth
-          ],
-        ),
-        kHeight30
-      ],
+          ),
+          kheight,
+          Text(
+            details,
+            // movieInfo.overview,
+            style: const TextStyle(color: Colors.grey),
+          ),
+        ],
+      ),
     );
   }
 }

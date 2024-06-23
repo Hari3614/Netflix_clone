@@ -5,7 +5,7 @@ import 'package:netflix/core/api_const.dart';
 import 'package:netflix/model/model.dart';
 
 String trendingMovies =
-    "https://api.themoviedb.org/3/trending/movie/{time_window}?api_key=${ApiConstants.apikey}";
+    "https://api.themoviedb.org/3/trending/all/week?api_key=${ApiConstants.apikey}";
 String horrorMovies =
     'https://api.themoviedb.org/3/discover/movie?api_key=${ApiConstants.apikey}&with_genres=27';
 String comedyMovies =

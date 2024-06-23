@@ -1,23 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:netflix/core/constants.dart';
-import 'package:netflix/presentation/home/widgets/background_card.dart';
-import 'package:netflix/presentation/home/widgets/number_card.dart';
-import 'package:netflix/presentation/widgets/app_bar_widgets.dart';
-import 'package:netflix/presentation/widgets/main_title.dart';
+import 'package:netflix/infrastructure/function/movie_funtion.dart';
+import 'package:netflix/model/model.dart';
+import 'package:netflix/presentation/home/widgets/custom_botton_widget.dart';
+import 'package:netflix/presentation/home/widgets/numbyr_title_card.dart';
+import 'package:netflix/presentation/home/widgets/play_button.dart';
 import 'package:netflix/presentation/widgets/main_titlr_card.dart';
 
 ValueNotifier<bool> scrollNotifier = ValueNotifier(true);
 
-class ScreenHome extends StatelessWidget {
+class ScreenHome extends StatefulWidget {
   const ScreenHome({super.key});
+
+  @override
+  State<ScreenHome> createState() => _ScreenHomeState();
+}
+
+class _ScreenHomeState extends State<ScreenHome> {
+  late Future<List<Movie>> trendingMovies;
+  late Future<List<Movie>> horrorMovies;
+  late Future<List<Movie>> comedyMovies;
+  late Future<List<Movie>> actionMovies;
+  late Future<List<Movie>> upComingMovies;
+
+  @override
+  void initState() {
+    trendingMovies = getTrendingMovies();
+    horrorMovies = getHorrorMovies();
+    comedyMovies = getComedyMovies();
+    actionMovies = getActionMovies();
+    upComingMovies = getUpComingMovies();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ValueListenableBuilder(
+        body: SafeArea(
+      child: ValueListenableBuilder(
         valueListenable: scrollNotifier,
-        builder: (BuildContext context, index, _) {
+        builder: (BuildContext, context, index) {
           return NotificationListener<UserScrollNotification>(
             onNotification: (notification) {
               final ScrollDirection direction = notification.direction;
@@ -32,59 +56,50 @@ class ScreenHome extends StatelessWidget {
               children: [
                 ListView(
                   children: [
-                    const BackgroundCard(),
-                    kheight,
-                    const MainTitleCards(
-                      title: "Released in the Past Year",
-                    ),
-                    kheight,
-                    const MainTitleCards(
-                      title: "Trending Now",
-                    ),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const HomeBackgroundCard(),
+                        MainTitleCard(
+                          movies: trendingMovies,
+                          title: "Trending Movies",
+                        ),
                         kheight,
-                        const MainTitle(title: "Top 10 Movies in India Today "),
+                        MainTitleCard(
+                          movies: horrorMovies,
+                          title: 'Horror Movies',
+                        ),
                         kheight,
-                        LimitedBox(
-                          maxHeight: 200,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: List.generate(
-                              10,
-                              (index) => NumberCard(
-                                index: index,
-                              ),
-                            ),
-                          ),
+                        NumberTitleCard(movies: upComingMovies),
+                        kheight,
+                        MainTitleCard(
+                          movies: comedyMovies,
+                          title: 'Comedy Movies',
+                        ),
+                        kheight,
+                        MainTitleCard(
+                          movies: actionMovies,
+                          title: 'Action films',
                         )
                       ],
-                    ),
-                    kheight,
-                    const MainTitleCards(
-                      title: "Tense Dramas",
-                    ),
-                    kheight,
-                    const MainTitleCards(
-                      title: "South Indian Cinema",
                     ),
                   ],
                 ),
                 scrollNotifier.value == true
                     ? AnimatedContainer(
-                        duration: const Duration(milliseconds: 1000),
+                        duration: const Duration(milliseconds: 6000),
                         width: double.infinity,
-                        height: 90,
-                        color: Colors.black.withOpacity(0.4),
+                        height: 80,
+                        color: Colors.black.withOpacity(0.6),
                         child: Column(
                           children: [
                             Row(
                               children: [
-                                Image.network(
-                                  'https://pngimg.com/d/netflix_PNG22.png',
-                                  width: 60,
-                                  height: 60,
+                                kWidth,
+                                const Image(
+                                  image: NetworkImage(
+                                      'https://static.vecteezy.com/system/resources/previews/017/396/804/non_2x/netflix-mobile-application-logo-free-png.png'),
+                                  width: 45,
+                                  height: 45,
                                 ),
                                 const Spacer(),
                                 const Icon(
@@ -96,50 +111,80 @@ class ScreenHome extends StatelessWidget {
                                 Container(
                                   width: 30,
                                   height: 30,
-                                  color:
-                                      const Color.fromARGB(255, 41, 158, 255),
-                                  child: CustomPaint(
-                                    painter: SmileyPainter(),
-                                  ),
+                                  decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                          image: NetworkImage(appBarImage),
+                                          fit: BoxFit.cover)),
                                 ),
+                                kheight,
                                 kWidth,
                               ],
+                            ),
+                            const SizedBox(
+                              height: 5,
                             ),
                             const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Text(
                                   "TV Shows",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: textStyle,
                                 ),
                                 Text(
                                   "Movies",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: textStyle,
                                 ),
                                 Text(
-                                  "Categories ",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                  'Categories',
+                                  style: textStyle,
+                                )
                               ],
-                            ),
+                            )
                           ],
-                        ),
-                      )
-                    : kheight,
+                        ))
+                    : kheight
               ],
             ),
           );
         },
       ),
+    ));
+  }
+}
+
+class HomeBackgroundCard extends StatelessWidget {
+  const HomeBackgroundCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          height: 600,
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage(kMainimage), fit: BoxFit.cover)),
+        ),
+        const Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CoustomButtonWidget(icon: Icons.add, title: 'My List '),
+                PlayButton(),
+                CoustomButtonWidget(icon: Icons.info_outline, title: 'Info'),
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 }
